@@ -1,91 +1,130 @@
-```markdown
 # Celestial Bodies Database
 
-## Project Description
+> Welcome! Are you ready to build a database of the universe?
 
-This project is a PostgreSQL database that models celestial bodies in our universe. It was created as part of the freeCodeCamp Relational Database certification.
+## Overview
 
-## Database Structure
+In this project, you will create a database to manage data about galaxies, stars, planets, and moons. You'll need to set up the database, create tables, and ensure that all relationships and constraints are correctly implemented. This project will help you practice SQL and database design.
 
-The database consists of five tables:
+## Instructions
 
-1. `galaxy`
-2. `star`
-3. `planet`
-4. `moon`
-5. `asteroid` (additional table)
+Follow the instructions below to complete the project. Make sure to pass all tests to finish the project successfully. Have fun and get creative with your database design!
 
-Each table has a primary key that automatically increments, and appropriate foreign key relationships are established between tables.
+**Important**: Remember to connect to your database after creating it. Use the `psql` command to log in and `\c universe` to connect to your database.
 
-## Table Details
+## 1.1 Tasks
 
-### Galaxy Table
-- Contains information about different galaxies
-- Includes columns for name, age, diameter, type, and other characteristics
+### 1. Create the Database
 
-### Star Table
-- Stores data about stars
-- Linked to the galaxy table
-- Includes information such as mass, temperature, and color
+1. **Create a Database**:
+   - Log into PostgreSQL:
+     ```bash
+     psql --username=freecodecamp --dbname=postgres
+     ```
+   - Create the `universe` database:
+     ```sql
+     CREATE DATABASE universe;
+     ```
+   - Connect to the `universe` database:
+     ```sql
+     \c universe
+     ```
 
-### Planet Table
-- Contains details about planets
-- Linked to the star table
-- Includes data on mass, radius, atmosphere, and habitability
+### 2. Create Tables
 
-### Moon Table
-- Stores information about moons
-- Linked to the planet table
-- Includes details like radius, shape, and orbital period
+1. **Create Tables**:
+   - You need to create tables for `galaxy`, `star`, `planet`, and `moon`.
+   - Each table should have a primary key that auto-increments.
+   - Each table should include a `name` column and other columns of different data types.
 
-### Asteroid Table
-- Additional table with information about asteroids
-- Includes data such as diameter, potential hazard classification, and discovery year
+   **Example Schema**:
 
-## Key Features
+   ```sql
+   CREATE TABLE galaxy (
+       galaxy_id SERIAL PRIMARY KEY,
+       name VARCHAR(255) UNIQUE NOT NULL,
+       description TEXT,
+       distance_from_earth NUMERIC,
+       has_life BOOLEAN
+   );
 
-- Uses various data types including INT, NUMERIC, TEXT, BOOLEAN, and VARCHAR
-- Implements NOT NULL and UNIQUE constraints
-- Follows naming conventions for primary and foreign keys
-- Contains sample data for each table
+   CREATE TABLE star (
+       star_id SERIAL PRIMARY KEY,
+       name VARCHAR(255) UNIQUE NOT NULL,
+       galaxy_id INT REFERENCES galaxy(galaxy_id),
+       type VARCHAR(50),
+       age_in_millions_of_years INT,
+       is_spherical BOOLEAN
+   );
 
-## How to Use
+   CREATE TABLE planet (
+       planet_id SERIAL PRIMARY KEY,
+       name VARCHAR(255) UNIQUE NOT NULL,
+       star_id INT REFERENCES star(star_id),
+       diameter NUMERIC,
+       has_rings BOOLEAN,
+       atmosphere TEXT
+   );
 
-1. Ensure you have PostgreSQL installed on your system
-2. Connect to PostgreSQL using the command:
+   CREATE TABLE moon (
+       moon_id SERIAL PRIMARY KEY,
+       name VARCHAR(255) UNIQUE NOT NULL,
+       planet_id INT REFERENCES planet(planet_id),
+       diameter NUMERIC,
+       is_spherical BOOLEAN
+   );
    ```
-   psql --username=freecodecamp --dbname=postgres
+
+### 3. Insert Data
+
+1. **Populate the Tables**:
+   - Insert at least six rows into the `galaxy` and `star` tables.
+   - Insert at least twelve rows into the `planet` table.
+   - Insert at least twenty rows into the `moon` table.
+   - Ensure each table has at least three columns and meets the requirements for columns that should not accept `NULL` values.
+
+   **Example Insertion**:
+
+   ```sql
+   INSERT INTO galaxy (name, description, distance_from_earth, has_life)
+   VALUES ('Milky Way', 'Our galaxy', 0, TRUE),
+          ('Andromeda', 'Closest galaxy', 2500000, FALSE),
+          -- Add more rows
+          ;
+
+   INSERT INTO star (name, galaxy_id, type, age_in_millions_of_years, is_spherical)
+   VALUES ('Sun', 1, 'G-Type', 4600, TRUE),
+          ('Proxima Centauri', 1, 'M-Type', 4600, TRUE),
+          -- Add more rows
+          ;
    ```
-3. Create the `universe` database and connect to it
-4. Run the SQL commands provided in the script to create tables and insert data
 
-## Backup and Restore
+### 4. Ensure Constraints
 
-To create a backup of the database:
-```
-pg_dump -cC --inserts -U freecodecamp universe > universe.sql
-```
+1. **Check Constraints**:
+   - Ensure that:
+     - Each table has a primary key that auto-increments.
+     - Columns that should not accept `NULL` values have the `NOT NULL` constraint.
+     - Each table has at least one `UNIQUE` column.
+     - Foreign key relationships are correctly implemented.
 
-To restore the database:
-```
-psql -U postgres < universe.sql
-```
+## Additional Notes
 
-## Project Requirements
+- **Database Dump**: To save your progress, create a dump of your database:
+  ```bash
+  pg_dump -cC --inserts -U freecodecamp universe > universe.sql
+  ```
 
-This database was created to meet specific requirements, including:
-- Specific table and column structures
-- Minimum number of rows for each table
-- Use of various data types and constraints
-- Proper relationships between tables
+- **Restoring Database**: To restore the database from the dump file:
+  ```bash
+  psql -U postgres < universe.sql
+  ```
 
-For a full list of requirements, please refer to the project instructions.
+- **Permissions**: Ensure your SQL scripts and any other necessary files have the correct permissions.
 
-## Author
+## Submission
 
-Amit Tanna
-
-## Acknowledgments
-
-This project was completed as part of the freeCodeCamp Relational Database certification.
+- Save your progress on freeCodeCamp.org.
+- Upload the `universe.sql` file and any final scripts to a public repository.
+- Submit the URL to the repository on freeCodeCamp.org.
 
